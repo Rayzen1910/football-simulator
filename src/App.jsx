@@ -907,6 +907,13 @@ function App() {
             <p className="feature-desc">Klasemen liga dan riwayat pertandingan yang sinkron secara langsung. Tidak perlu input manual.</p>
           </div>
           
+          <div className="feature-card">
+            <div className="feature-icon">
+              <Cpu />
+            </div>
+            <h3 className="feature-title">AI Match Predictions</h3>
+            <p className="feature-desc">Bukan tebak-tebakan semata. Prediksi berbasis performa 5 match terakhir, formasi, dan statistik head-to-head.</p>
+          </div>
         </div>
       </section>
 
