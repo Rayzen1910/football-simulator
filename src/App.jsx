@@ -458,7 +458,24 @@ function App() {
                           <div style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1rem', fontWeight: 'bold', letterSpacing: '1px' }}>
                             {isLastRound ? 'FINAL' : `BABAK ${rIndex + 1}`}
                           </div>
-                          {roundMatches.map((match, mIdx) => (
+                          {roundMatches.map((match, mIdx) => {
+                            const leg2 = activeTournament.matches.find(m => m.roundIndex === rIndex && m.matchIndex === mIdx && m.legInfo === 'Leg 2');
+                            let aggA = null;
+                            let aggB = null;
+                            let penTextA = '';
+                            let penTextB = '';
+                            if (match.isPlayed && leg2 && leg2.isPlayed) {
+                               aggA = (parseInt(match.scoreA)||0) + (parseInt(leg2.scoreB)||0);
+                               aggB = (parseInt(match.scoreB)||0) + (parseInt(leg2.scoreA)||0);
+                               const pA = parseInt(leg2.penA);
+                               const pB = parseInt(leg2.penB);
+                               if (!isNaN(pA) && !isNaN(pB)) {
+                                  penTextA = pA > pB ? `(P:${pA})` : `(${pA})`;
+                                  penTextB = pB > pA ? `(P:${pB})` : `(${pB})`;
+                               }
+                            }
+                            
+                            return (
                             <div key={mIdx} style={{ 
                               display: 'flex', flexDirection: 'column', 
                               background: 'rgba(255,255,255,0.03)', 
@@ -484,14 +501,29 @@ function App() {
                                 </>
                               )}
                               
-                              <div style={{ padding: '0.8rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                <span style={{ fontWeight: 'bold', fontSize: '1rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{match.teamA}</span>
+                              <div style={{ padding: '0.6rem 0.8rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                                <span style={{ fontWeight: 'bold', fontSize: '1rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                  {match.teamA} {penTextA && <span style={{fontSize: '0.75rem', color: '#ef4444', marginLeft: '4px'}}>{penTextA}</span>}
+                                </span>
+                                {aggA !== null && (
+                                  <div style={{ background: 'var(--primary)', color: 'var(--bg-dark)', fontWeight: 'bold', padding: '0.2rem 0.6rem', borderRadius: '4px', fontSize: '0.9rem' }}>
+                                    {aggA}
+                                  </div>
+                                )}
                               </div>
-                              <div style={{ padding: '0.8rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.2)' }}>
-                                <span style={{ fontWeight: 'bold', fontSize: '1rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{match.teamB}</span>
+                              <div style={{ padding: '0.6rem 0.8rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.2)', borderBottomLeftRadius: '8px', borderBottomRightRadius: '8px' }}>
+                                <span style={{ fontWeight: 'bold', fontSize: '1rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                  {match.teamB} {penTextB && <span style={{fontSize: '0.75rem', color: '#ef4444', marginLeft: '4px'}}>{penTextB}</span>}
+                                </span>
+                                {aggB !== null && (
+                                  <div style={{ background: 'var(--primary)', color: 'var(--bg-dark)', fontWeight: 'bold', padding: '0.2rem 0.6rem', borderRadius: '4px', fontSize: '0.9rem' }}>
+                                    {aggB}
+                                  </div>
+                                )}
                               </div>
                             </div>
-                          ))}
+                            )
+                          })}
                         </div>
                       )
                     })}
