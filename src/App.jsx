@@ -886,8 +886,17 @@ function App() {
           </div>
           <div className="tournaments-grid">
             {customTournaments.map((t, idx) => (
-              <div key={idx} className="tournament-card" style={{ borderColor: 'var(--primary)' }}>
-                <div className="t-status status-active">Custom</div>
+              <div key={idx} className="tournament-card" style={{ borderColor: 'var(--primary)', position: 'relative' }}>
+                <button 
+                  onClick={() => deleteTournament(t.id)}
+                  style={{ position: 'absolute', top: '15px', right: '15px', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid #ef4444', color: '#ef4444', borderRadius: '50%', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 10, transition: 'all 0.2s' }}
+                  title="Hapus Turnamen"
+                  onMouseEnter={(e) => { e.currentTarget.style.background = '#ef4444'; e.currentTarget.style.color = '#fff'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)'; e.currentTarget.style.color = '#ef4444'; }}
+                >
+                  ✕
+                </button>
+                <div className="t-status status-active" style={{ marginLeft: '10px' }}>Custom</div>
                 <div className="t-logo-placeholder" style={{ color: '#fff', background: 'linear-gradient(135deg, var(--primary), var(--secondary))' }}>
                   {t.type === 'liga' ? 'LG' : 'KN'}
                 </div>
