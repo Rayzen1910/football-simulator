@@ -682,8 +682,8 @@ function App() {
                                  aggB = (parseInt(match.scoreB)||0) + (parseInt(leg2.scoreA)||0);
                                  const pA = parseInt(leg2.penA); const pB = parseInt(leg2.penB);
                                  if (!isNaN(pA) && !isNaN(pB)) {
-                                    penTextA = pB > pA ? `(P:\${pB})` : `(\${pB})`;
-                                    penTextB = pA > pB ? `(P:\${pA})` : `(\${pA})`;
+                                    penTextA = pB > pA ? `(P:${pB})` : `(${pB})`;
+                                    penTextB = pA > pB ? `(P:${pA})` : `(${pA})`;
                                  }
                               }
                               return (
@@ -725,8 +725,8 @@ function App() {
                            aggB = (parseInt(match.scoreB)||0) + (parseInt(leg2.scoreA)||0);
                            const pA = parseInt(leg2.penA); const pB = parseInt(leg2.penB);
                            if (!isNaN(pA) && !isNaN(pB)) {
-                              penTextA = pB > pA ? `(P:\${pB})` : `(\${pB})`;
-                              penTextB = pA > pB ? `(P:\${pA})` : `(\${pA})`;
+                              penTextA = pB > pA ? `(P:${pB})` : `(${pB})`;
+                              penTextB = pA > pB ? `(P:${pA})` : `(${pA})`;
                            }
                         }
                         return (
@@ -769,8 +769,8 @@ function App() {
                                  aggB = (parseInt(match.scoreB)||0) + (parseInt(leg2.scoreA)||0);
                                  const pA = parseInt(leg2.penA); const pB = parseInt(leg2.penB);
                                  if (!isNaN(pA) && !isNaN(pB)) {
-                                    penTextA = pB > pA ? `(P:\${pB})` : `(\${pB})`;
-                                    penTextB = pA > pB ? `(P:\${pA})` : `(\${pA})`;
+                                    penTextA = pB > pA ? `(P:${pB})` : `(${pB})`;
+                                    penTextB = pA > pB ? `(P:${pA})` : `(${pA})`;
                                  }
                               }
                               return (
