@@ -839,24 +839,6 @@ function App() {
         <h1>Interactive Football Simulator for Every Fan</h1>
         <p>Visualize tournament brackets, simulate matches, and explore non-official knockout scenarios with a fast and fully interactive experience.</p>
         
-        <div className="hero-actions">
-          <button className="btn btn-primary" onClick={() => document.getElementById('simulator').scrollIntoView({behavior: 'smooth'})}>
-            Try Simulation <ArrowRight size={18} />
-          </button>
-          <button className="btn btn-outline" onClick={() => showToast('Mengarahkan ke halaman Top Up/Donasi...')}>
-            <Zap size={18} color="#10b981" /> Power Up
-          </button>
-        </div>
-
-        <div className="hero-image-container">
-          <div className="hero-image">
-            <div style={{ textAlign: 'center', padding: '4rem' }}>
-              <Trophy size={80} color="rgba(16, 185, 129, 0.2)" style={{ marginBottom: '1rem' }} />
-              <h2 style={{ fontSize: '2rem', color: 'var(--text-muted)' }}>Knockout Stage Visualization</h2>
-              <p style={{ color: 'rgba(255,255,255,0.3)', marginTop: '0.5rem' }}>Interactive UI Demo</p>
-            </div>
-          </div>
-        </div>
       </header>
 
       <section id="features" className="section">
@@ -882,13 +864,6 @@ function App() {
             <p className="feature-desc">Klasemen liga dan riwayat pertandingan yang sinkron secara langsung. Tidak perlu input manual.</p>
           </div>
           
-          <div className="feature-card">
-            <div className="feature-icon">
-              <Cpu />
-            </div>
-            <h3 className="feature-title">AI Match Predictions</h3>
-            <p className="feature-desc">Bukan tebak-tebakan semata. Prediksi berbasis performa 5 match terakhir, formasi, dan statistik head-to-head.</p>
-          </div>
         </div>
       </section>
 
