@@ -8,7 +8,14 @@ function App() {
   const [showModal, setShowModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    try {
+      const savedUser = localStorage.getItem('footylabs_user');
+      return savedUser ? JSON.parse(savedUser) : null;
+    } catch (e) {
+      return null;
+    }
+  });
   
   const [tournamentType, setTournamentType] = useState('');
   const [toastMessage, setToastMessage] = useState(null);
@@ -35,11 +42,16 @@ function App() {
     }
   };
 
-  const [customTournaments, setCustomTournaments] = useState(() => loadData(null));
+  const [customTournaments, setCustomTournaments] = useState(() => loadData(user));
   const [activeTournament, setActiveTournament] = useState(null);
 
   // Sync state when user logs in or out
   useEffect(() => {
+    if (user) {
+      localStorage.setItem('footylabs_user', JSON.stringify(user));
+    } else {
+      localStorage.removeItem('footylabs_user');
+    }
     setCustomTournaments(loadData(user));
     setActiveTournament(null); // Tutup turnamen aktif agar tidak bug saat switch akun
   }, [user]);
