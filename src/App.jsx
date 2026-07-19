@@ -73,16 +73,16 @@ function App() {
       // Kandang-Tandang (Home & Away) Round Robin
       for (let i = 0; i < teams.length; i++) {
         for (let j = i + 1; j < teams.length; j++) {
-          matches.push({ id: `L-H-${i}-${j}`, teamA: teams[i], teamB: teams[j], scoreA: '', scoreB: '', scorersA: [], scorersB: [], isPlayed: false, legInfo: 'Kandang' });
-          matches.push({ id: `L-A-${i}-${j}`, teamA: teams[j], teamB: teams[i], scoreA: '', scoreB: '', scorersA: [], scorersB: [], isPlayed: false, legInfo: 'Tandang' });
+          matches.push({ id: `L-H-${i}-${j}`, teamA: teams[i], teamB: teams[j], scoreA: '', scoreB: '', goalsA: [], goalsB: [], isPlayed: false, legInfo: 'Kandang' });
+          matches.push({ id: `L-A-${i}-${j}`, teamA: teams[j], teamB: teams[i], scoreA: '', scoreB: '', goalsA: [], goalsB: [], isPlayed: false, legInfo: 'Tandang' });
         }
       }
     } else {
       // Kandang-Tandang (Home & Away) Knockout pairs (first round)
       for (let i = 0; i < teams.length; i += 2) {
         if (i + 1 < teams.length) {
-          matches.push({ id: `K-1-${i}`, teamA: teams[i], teamB: teams[i+1], scoreA: '', scoreB: '', scorersA: [], scorersB: [], isPlayed: false, legInfo: 'Leg 1' });
-          matches.push({ id: `K-2-${i}`, teamA: teams[i+1], teamB: teams[i], scoreA: '', scoreB: '', scorersA: [], scorersB: [], isPlayed: false, legInfo: 'Leg 2' });
+          matches.push({ id: `K-1-${i}`, teamA: teams[i], teamB: teams[i+1], scoreA: '', scoreB: '', goalsA: [], goalsB: [], isPlayed: false, legInfo: 'Leg 1' });
+          matches.push({ id: `K-2-${i}`, teamA: teams[i+1], teamB: teams[i], scoreA: '', scoreB: '', goalsA: [], goalsB: [], isPlayed: false, legInfo: 'Leg 2' });
         }
       }
     }
