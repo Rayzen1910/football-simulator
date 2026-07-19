@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Trophy, TrendingUp, Cpu, Zap, ArrowRight, Activity, Users, Eye, BarChart, Goal, Plus, List, Network, PlusCircle, Trash2, Download } from 'lucide-react';
+import { Trophy, TrendingUp, Cpu, Zap, ArrowRight, Activity, Users, Eye, BarChart, Goal, Plus, List, Network, PlusCircle, Trash2, Download, Share2 } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
@@ -61,6 +61,27 @@ function App() {
   }, [customTournaments, user]);
 
   // Form states
+  
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tParam = urlParams.get('t');
+    if (tParam) {
+      try {
+        const decoded = JSON.parse(decodeURIComponent(escape(atob(tParam))));
+        if (!decoded.id) decoded.id = Date.now().toString();
+        setCustomTournaments(prev => {
+          if (prev.find(p => p.id === decoded.id)) return prev;
+          return [decoded, ...prev];
+        });
+        setActiveTournament(decoded);
+        showToast('Turnamen "' + decoded.name + '" berhasil diimpor!');
+        window.history.replaceState({}, document.title, window.location.pathname);
+      } catch (e) {
+        showToast('Gagal memuat turnamen dari link.');
+      }
+    }
+  }, []);
+
   const [formName, setFormName] = useState('');
   const [formCount, setFormCount] = useState(8);
   const [formTeams, setFormTeams] = useState('');
@@ -386,6 +407,19 @@ function App() {
     }
   };
 
+  
+  const shareTournament = async () => {
+    try {
+      const dataStr = JSON.stringify(activeTournament);
+      const base64 = btoa(unescape(encodeURIComponent(dataStr)));
+      const url = `${window.location.origin}${window.location.pathname}?t=${base64}`;
+      await navigator.clipboard.writeText(url);
+      showToast('Link turnamen berhasil disalin ke clipboard!');
+    } catch (e) {
+      showToast('Gagal menyalin link (atau ukuran data terlalu besar).');
+    }
+  };
+
   const calculateTopScorers = (matches) => {
     const players = {};
     matches.forEach(match => {
@@ -424,15 +458,22 @@ function App() {
           ← Kembali ke Beranda
         </button>
         <div className="glass-panel" style={{ padding: '3rem', background: 'var(--bg-card)' }}>
-          <div className="badge" style={{ marginBottom: '1rem' }}>
-            {activeTournament.type === 'liga' ? 'League Format' : 'Knockout Format'}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '3rem' }}>
+            <div>
+              <div className="badge" style={{ marginBottom: '1rem' }}>
+                {activeTournament.type === 'liga' ? 'League Format' : 'Knockout Format'}
+              </div>
+              <h1 style={{ fontSize: '3rem', marginBottom: '0.5rem', color: 'var(--primary)' }}>
+                {activeTournament.name}
+              </h1>
+              <p style={{ color: 'var(--text-muted)', margin: 0 }}>
+                Jumlah Peserta: {activeTournament.count} Tim
+              </p>
+            </div>
+            <button className="btn btn-primary" onClick={shareTournament} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <Share2 size={18} /> Bagikan Link
+            </button>
           </div>
-          <h1 style={{ fontSize: '3rem', marginBottom: '1rem', color: 'var(--primary)' }}>
-            {activeTournament.name}
-          </h1>
-          <p style={{ color: 'var(--text-muted)', marginBottom: '3rem' }}>
-            Jumlah Peserta: {activeTournament.count} Tim
-          </p>
 
           <div style={{ display: 'grid', gridTemplateColumns: activeTournament.type === 'liga' ? '1.5fr 2.5fr' : '1fr 2.5fr', gap: '3rem' }}>
             {/* Kiri: Klasemen atau Tim Peserta */}
