@@ -1041,19 +1041,21 @@ function App() {
                 }}></textarea>
               </div>
 
-              <div style={{ marginBottom: '2rem' }}>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Pengaturan Bracket</label>
-                <div style={{ display: 'flex', gap: '1.5rem', background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.9rem' }}>
-                    <input type="radio" name="shuffle" checked={!formShuffle} onChange={() => setFormShuffle(false)} style={{ accentColor: 'var(--primary)' }} />
-                    Sesuai Urutan
-                  </label>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.9rem' }}>
-                    <input type="radio" name="shuffle" checked={formShuffle} onChange={() => setFormShuffle(true)} style={{ accentColor: 'var(--primary)' }} />
-                    Acak Otomatis (Shuffle)
-                  </label>
+              {tournamentType === 'knockout' && (
+                <div style={{ marginBottom: '2rem' }}>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Pengaturan Bracket</label>
+                  <div style={{ display: 'flex', gap: '1.5rem', background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.9rem' }}>
+                      <input type="radio" name="shuffle" checked={!formShuffle} onChange={() => setFormShuffle(false)} style={{ accentColor: 'var(--primary)' }} />
+                      Sesuai Urutan
+                    </label>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.9rem' }}>
+                      <input type="radio" name="shuffle" checked={formShuffle} onChange={() => setFormShuffle(true)} style={{ accentColor: 'var(--primary)' }} />
+                      Acak Otomatis (Shuffle)
+                    </label>
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
                 <button type="button" className="btn btn-outline" onClick={closeModal}>Batal</button>
