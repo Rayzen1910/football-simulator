@@ -929,31 +929,6 @@ function App() {
         </div>
       </section>
 
-      <section className="section" style={{ paddingTop: '2rem' }}>
-        <div className="stats-container">
-          <div className="stat-item">
-            <div className="stat-value">85K+</div>
-            <div className="stat-label">Active Fans</div>
-            <div className="stat-desc">Participated in simulations</div>
-          </div>
-          <div className="stat-item">
-            <div className="stat-value">120K+</div>
-            <div className="stat-label">Total Visits</div>
-            <div className="stat-desc">Unique sessions recorded</div>
-          </div>
-          <div className="stat-item">
-            <div className="stat-value">450K+</div>
-            <div className="stat-label">Page Views</div>
-            <div className="stat-desc">Total pages navigated</div>
-          </div>
-          <div className="stat-item">
-            <div className="stat-value">25K</div>
-            <div className="stat-label">Peak Daily Users</div>
-            <div className="stat-desc">Concurrent users in one day</div>
-          </div>
-        </div>
-      </section>
-
       <footer>
         <div className="footer-content">
           <div className="footer-brand">
