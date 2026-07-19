@@ -13,12 +13,15 @@ function App() {
   const [tournamentType, setTournamentType] = useState('');
   const [toastMessage, setToastMessage] = useState(null);
   
-  const [customTournaments, setCustomTournaments] = useState(() => {
+  const getStorageKey = (currentUser) => {
+    return currentUser ? `footylabs_tournaments_${currentUser.email}` : 'footylabs_tournaments';
+  };
+
+  const loadData = (currentUser) => {
     try {
-      const saved = localStorage.getItem('footylabs_tournaments');
+      const saved = localStorage.getItem(getStorageKey(currentUser));
       if (!saved) return [];
       const parsed = JSON.parse(saved);
-      // Migrasi data lama agar tidak error (black screen) karena format goals baru
       return parsed.map(t => ({
         ...t,
         matches: t.matches.map(m => ({
@@ -30,13 +33,20 @@ function App() {
     } catch (e) {
       return [];
     }
-  });
-  
+  };
+
+  const [customTournaments, setCustomTournaments] = useState(() => loadData(null));
   const [activeTournament, setActiveTournament] = useState(null);
 
+  // Sync state when user logs in or out
   useEffect(() => {
-    localStorage.setItem('footylabs_tournaments', JSON.stringify(customTournaments));
-  }, [customTournaments]);
+    setCustomTournaments(loadData(user));
+    setActiveTournament(null); // Tutup turnamen aktif agar tidak bug saat switch akun
+  }, [user]);
+
+  useEffect(() => {
+    localStorage.setItem(getStorageKey(user), JSON.stringify(customTournaments));
+  }, [customTournaments, user]);
 
   // Form states
   const [formName, setFormName] = useState('');
