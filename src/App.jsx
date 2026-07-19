@@ -617,6 +617,7 @@ function App() {
                                   return (
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem', background: 'rgba(239, 68, 68, 0.1)', padding: '0.5rem', borderRadius: '8px', border: '1px dashed #ef4444' }}>
                                       <span style={{ fontSize: '0.8rem', color: '#ef4444', fontWeight: 'bold' }}>PEN:</span>
+                                      <span style={{ fontSize: '0.7rem', color: 'white', fontWeight: 'bold', marginLeft: '4px', maxWidth: '40px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{match.teamA}</span>
                                       <input 
                                         type="number" min="0" placeholder="-" 
                                         value={match.penA || ''}
@@ -636,6 +637,7 @@ function App() {
                                           background: 'rgba(0,0,0,0.5)', color: 'white', border: '1px solid #ef4444', borderRadius: '6px', outline: 'none'
                                         }} 
                                       />
+                                      <span style={{ fontSize: '0.7rem', color: 'white', fontWeight: 'bold', marginRight: '4px', maxWidth: '40px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{match.teamB}</span>
                                     </div>
                                   );
                                 }
