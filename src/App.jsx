@@ -896,7 +896,6 @@ function App() {
                 >
                   ✕
                 </button>
-                <div className="t-status status-active" style={{ marginLeft: '10px' }}>Custom</div>
                 <div className="t-logo-placeholder" style={{ color: '#fff', background: 'linear-gradient(135deg, var(--primary), var(--secondary))' }}>
                   {t.type === 'liga' ? 'LG' : 'KN'}
                 </div>
