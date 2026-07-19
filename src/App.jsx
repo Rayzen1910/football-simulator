@@ -467,11 +467,11 @@ function App() {
                             if (match.isPlayed && leg2 && leg2.isPlayed) {
                                aggA = (parseInt(match.scoreA)||0) + (parseInt(leg2.scoreB)||0);
                                aggB = (parseInt(match.scoreB)||0) + (parseInt(leg2.scoreA)||0);
-                               const pA = parseInt(leg2.penA);
-                               const pB = parseInt(leg2.penB);
+                               const pA = parseInt(leg2.penA); // leg2.teamA is leg1.teamB
+                               const pB = parseInt(leg2.penB); // leg2.teamB is leg1.teamA
                                if (!isNaN(pA) && !isNaN(pB)) {
-                                  penTextA = pA > pB ? `(P:${pA})` : `(${pA})`;
-                                  penTextB = pB > pA ? `(P:${pB})` : `(${pB})`;
+                                  penTextA = pB > pA ? `(P:${pB})` : `(${pB})`;
+                                  penTextB = pA > pB ? `(P:${pA})` : `(${pA})`;
                                }
                             }
                             
