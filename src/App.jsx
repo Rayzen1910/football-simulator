@@ -324,17 +324,37 @@ function App() {
                   </table>
                 </div>
               ) : (
-                <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', maxHeight: '500px', overflowY: 'auto', paddingRight: '0.5rem' }}>
-                  {activeTournament.teams.length > 0 ? (
-                    activeTournament.teams.map((team, idx) => (
-                      <li key={idx} style={{ padding: '0.8rem', background: 'rgba(255,255,255,0.05)', borderRadius: '8px' }}>
-                        {idx + 1}. {team}
-                      </li>
-                    ))
-                  ) : (
-                    <li style={{ color: 'var(--text-muted)' }}>Belum ada tim yang didaftarkan.</li>
-                  )}
-                </ul>
+                <div style={{ padding: '1rem', background: 'var(--bg-card)', borderRadius: '12px' }}>
+                  <h4 style={{ color: 'var(--primary)', marginBottom: '1.5rem', textAlign: 'center', letterSpacing: '1px' }}>MATCHUPS BABAK AWAL</h4>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', position: 'relative' }}>
+                    {/* Garis vertikal penghubung bracket di sebelah kanan */}
+                    <div style={{ position: 'absolute', right: '15px', top: '30px', bottom: '30px', width: '2px', background: 'var(--border-color)', zIndex: 0 }}></div>
+                    
+                    {Array.from({ length: Math.ceil(activeTournament.teams.length / 2) }).map((_, idx) => {
+                      const team1 = activeTournament.teams[idx * 2];
+                      const team2 = activeTournament.teams[idx * 2 + 1] || 'BYE (Otomatis Lolos)';
+                      return (
+                        <div key={idx} style={{ 
+                          display: 'flex', flexDirection: 'column', 
+                          background: 'rgba(255,255,255,0.03)', 
+                          borderRadius: '8px', border: '1px solid var(--border-color)',
+                          position: 'relative', zIndex: 1, marginRight: '30px',
+                          boxShadow: '0 4px 6px rgba(0,0,0,0.3)'
+                        }}>
+                          {/* Garis horizontal konektor ke kanan */}
+                          <div style={{ position: 'absolute', right: '-15px', top: '50%', width: '15px', height: '2px', background: 'var(--border-color)' }}></div>
+                          
+                          <div style={{ padding: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                            <span style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{team1}</span>
+                          </div>
+                          <div style={{ padding: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.2)' }}>
+                            <span style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{team2}</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               )}
 
               {/* TOP SKOR */}
