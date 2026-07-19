@@ -62,26 +62,6 @@ function App() {
 
   // Form states
   
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const tParam = urlParams.get('t');
-    if (tParam) {
-      try {
-        const decoded = JSON.parse(decodeURIComponent(escape(atob(tParam))));
-        if (!decoded.id) decoded.id = Date.now().toString();
-        setCustomTournaments(prev => {
-          if (prev.find(p => p.id === decoded.id)) return prev;
-          return [decoded, ...prev];
-        });
-        setActiveTournament(decoded);
-        showToast('Turnamen "' + decoded.name + '" berhasil diimpor!');
-        window.history.replaceState({}, document.title, window.location.pathname);
-      } catch (e) {
-        showToast('Gagal memuat turnamen dari link.');
-      }
-    }
-  }, []);
-
   const [formName, setFormName] = useState('');
   const [formCount, setFormCount] = useState(8);
   const [formTeams, setFormTeams] = useState('');
@@ -385,10 +365,10 @@ function App() {
     return standings;
   };
 
-  const exportKlasemen = async () => {
-    const element = document.getElementById('klasemen-board');
+  const exportTournamentImage = async () => {
+    const element = document.getElementById('tournament-view');
     if (element) {
-      showToast('Menyiapkan gambar klasemen...');
+      showToast('Menyiapkan gambar turnamen...');
       try {
         const canvas = await html2canvas(element, {
           backgroundColor: '#111827', // Menyesuaikan dengan tema gelap
@@ -400,7 +380,7 @@ function App() {
         link.href = dataUrl;
         link.download = `Klasemen_${activeTournament.name.replace(/\s+/g, '_')}.png`;
         link.click();
-        showToast('Gambar klasemen berhasil diunduh!');
+        showToast('Gambar turnamen berhasil diunduh!');
       } catch (error) {
         showToast('Gagal mengunduh gambar.');
       }
@@ -408,18 +388,6 @@ function App() {
   };
 
   
-  const shareTournament = async () => {
-    try {
-      const dataStr = JSON.stringify(activeTournament);
-      const base64 = btoa(unescape(encodeURIComponent(dataStr)));
-      const url = `${window.location.origin}${window.location.pathname}?t=${base64}`;
-      await navigator.clipboard.writeText(url);
-      showToast('Link turnamen berhasil disalin ke clipboard!');
-    } catch (e) {
-      showToast('Gagal menyalin link (atau ukuran data terlalu besar).');
-    }
-  };
-
   const calculateTopScorers = (matches) => {
     const players = {};
     matches.forEach(match => {
@@ -457,7 +425,7 @@ function App() {
         <button className="btn btn-outline" style={{ marginBottom: '2rem' }} onClick={() => setActiveTournament(null)}>
           ← Kembali ke Beranda
         </button>
-        <div className="glass-panel" style={{ padding: '3rem', background: 'var(--bg-card)' }}>
+        <div id="tournament-view" className="glass-panel" style={{ padding: '3rem', background: 'var(--bg-card)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '3rem' }}>
             <div>
               <div className="badge" style={{ marginBottom: '1rem' }}>
@@ -470,8 +438,8 @@ function App() {
                 Jumlah Peserta: {activeTournament.count} Tim
               </p>
             </div>
-            <button className="btn btn-primary" onClick={shareTournament} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Share2 size={18} /> Bagikan Link
+            <button className="btn btn-primary" onClick={exportTournamentImage} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <Download size={18} /> Unduh Gambar
             </button>
           </div>
 
@@ -482,11 +450,7 @@ function App() {
                 <h3 style={{ margin: 0 }}>
                   {activeTournament.type === 'liga' ? 'Klasemen (Live)' : 'Tim Peserta'}
                 </h3>
-                {activeTournament.type === 'liga' && (
-                  <button onClick={exportKlasemen} className="btn btn-outline" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem', gap: '0.4rem' }}>
-                    <Download size={14} /> Export PNG
-                  </button>
-                )}
+                
               </div>
               
               {activeTournament.type === 'liga' ? (
