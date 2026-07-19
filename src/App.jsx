@@ -42,12 +42,14 @@ function App() {
   const [formName, setFormName] = useState('');
   const [formCount, setFormCount] = useState(8);
   const [formTeams, setFormTeams] = useState('');
+  const [formShuffle, setFormShuffle] = useState(false);
   
   const openModal = (type) => {
     setTournamentType(type);
     setFormName('');
     setFormCount(8);
     setFormTeams('');
+    setFormShuffle(false);
     setShowModal(true);
   };
   
@@ -864,6 +866,15 @@ function App() {
             <form onSubmit={(e) => { 
               e.preventDefault();
               const teamsArray = formTeams.split(/\n|,/).map(t => t.trim()).filter(Boolean);
+              
+              if (formShuffle) {
+                // Fisher-Yates shuffle
+                for (let i = teamsArray.length - 1; i > 0; i--) {
+                  const j = Math.floor(Math.random() * (i + 1));
+                  [teamsArray[i], teamsArray[j]] = [teamsArray[j], teamsArray[i]];
+                }
+              }
+              
               const matches = generateMatches(teamsArray, tournamentType);
               
               setCustomTournaments([...customTournaments, {
@@ -897,7 +908,7 @@ function App() {
                 }} />
               </div>
 
-              <div style={{ marginBottom: '2rem' }}>
+              <div style={{ marginBottom: '1.5rem' }}>
                 <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Daftar Tim (Pisahkan dengan koma atau baris baru)</label>
                 <textarea required rows="4" placeholder="Cth: Arsenal, Chelsea, Liverpool, Manchester City..." 
                   value={formTeams} onChange={(e) => setFormTeams(e.target.value)}
@@ -905,6 +916,20 @@ function App() {
                   width: '100%', padding: '0.8rem', borderRadius: '8px', border: '1px solid var(--border-color)',
                   background: 'rgba(0,0,0,0.5)', color: 'white', outline: 'none', resize: 'vertical'
                 }}></textarea>
+              </div>
+
+              <div style={{ marginBottom: '2rem' }}>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Pengaturan Bracket</label>
+                <div style={{ display: 'flex', gap: '1.5rem', background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.9rem' }}>
+                    <input type="radio" name="shuffle" checked={!formShuffle} onChange={() => setFormShuffle(false)} style={{ accentColor: 'var(--primary)' }} />
+                    Sesuai Urutan
+                  </label>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.9rem' }}>
+                    <input type="radio" name="shuffle" checked={formShuffle} onChange={() => setFormShuffle(true)} style={{ accentColor: 'var(--primary)' }} />
+                    Acak Otomatis (Shuffle)
+                  </label>
+                </div>
               </div>
 
               <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
