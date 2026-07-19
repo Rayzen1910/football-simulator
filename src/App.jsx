@@ -314,6 +314,47 @@ function App() {
       showToast('Turnamen berhasil dihapus');
     }
   };
+  const createTemplateTournament = (template) => {
+    let name = '';
+    let type = '';
+    let teams = [];
+    
+    if (template === 'ucl') {
+      name = 'UEFA Champions League';
+      type = 'knockout';
+      teams = ['Real Madrid', 'Man City', 'Bayern Munich', 'Arsenal', 'Barcelona', 'PSG', 'Inter Milan', 'Juventus', 'Liverpool', 'Atletico Madrid', 'Bayer Leverkusen', 'Borussia Dortmund', 'AC Milan', 'Napoli', 'Sporting CP', 'PSV Eindhoven'];
+    } else if (template === 'fifa') {
+      name = 'FIFA World Cup';
+      type = 'knockout';
+      teams = ['Argentina', 'France', 'Brazil', 'England', 'Spain', 'Portugal', 'Germany', 'Netherlands', 'Italy', 'Croatia', 'Uruguay', 'Colombia', 'Belgium', 'Morocco', 'Japan', 'USA'];
+    } else if (template === 'epl') {
+      name = 'English Premier League';
+      type = 'liga';
+      teams = ['Arsenal', 'Man City', 'Liverpool', 'Chelsea', 'Tottenham', 'Man United', 'Newcastle', 'Aston Villa'];
+    }
+
+    if (type === 'knockout') {
+      for (let i = teams.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [teams[i], teams[j]] = [teams[j], teams[i]];
+      }
+    }
+
+    const matches = generateMatches(teams, type);
+    const newTournament = {
+      id: Date.now().toString(),
+      name,
+      type,
+      count: teams.length,
+      teams,
+      matches
+    };
+    
+    setCustomTournaments(prev => [...prev, newTournament]);
+    setActiveTournament(newTournament);
+    window.scrollTo(0, 0);
+    showToast(`${name} berhasil dibuat!`);
+  };
 
   const calculateStandings = (teams, matches) => {
     const standings = teams.map(team => ({ name: team, P: 0, W: 0, D: 0, L: 0, GF: 0, GA: 0, GD: 0, Pts: 0 }));
@@ -881,15 +922,15 @@ function App() {
             <div className="t-logo-placeholder">UCL</div>
             <h3 className="t-title">Champions League</h3>
             <p className="t-desc">UEFA Champions League 2026/2027</p>
-            <a href="#" className="t-action" onClick={(e) => handleLinkClick(e, 'Memuat Simulator Champions League...')}>Simulate <ArrowRight size={16} /></a>
+            <a href="#" className="t-action" onClick={(e) => { e.preventDefault(); createTemplateTournament('ucl'); }}>Simulate <ArrowRight size={16} /></a>
           </div>
 
           <div className="tournament-card">
-            <div className="t-status status-completed">Completed</div>
+            <div className="t-status status-active" style={{ background: 'rgba(251, 191, 36, 0.2)', color: '#fbbf24' }}>Popular</div>
             <div className="t-logo-placeholder" style={{ color: '#fbbf24' }}>FIFA</div>
             <h3 className="t-title">FIFA World Cup</h3>
             <p className="t-desc">World Cup 2026</p>
-            <a href="#" className="t-action" onClick={(e) => handleLinkClick(e, 'Memuat Simulator FIFA World Cup...')}>Simulate <ArrowRight size={16} /></a>
+            <a href="#" className="t-action" onClick={(e) => { e.preventDefault(); createTemplateTournament('fifa'); }}>Simulate <ArrowRight size={16} /></a>
           </div>
 
           <div className="tournament-card">
@@ -897,7 +938,7 @@ function App() {
             <div className="t-logo-placeholder">EPL</div>
             <h3 className="t-title">Premier League</h3>
             <p className="t-desc">English Premier League 2026/2027</p>
-            <a href="#" className="t-action" onClick={(e) => handleLinkClick(e, 'Memuat Simulator Premier League...')}>Simulate <ArrowRight size={16} /></a>
+            <a href="#" className="t-action" onClick={(e) => { e.preventDefault(); createTemplateTournament('epl'); }}>Simulate <ArrowRight size={16} /></a>
           </div>
         </div>
       </section>
