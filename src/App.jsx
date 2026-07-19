@@ -256,7 +256,7 @@ function App() {
       if (t.id === activeTournament.id) {
         const updatedMatches = t.matches.map(m => {
           if (m.id === matchId) {
-            const newGoal = { id: Date.now() + Math.random(), name: '', time: '' };
+            const newGoal = { id: Date.now() + Math.random(), name: '', time: '', assist: '' };
             return { ...m, [teamKey]: [...m[teamKey], newGoal] };
           }
           return m;
@@ -314,6 +314,131 @@ function App() {
       showToast('Turnamen berhasil dihapus');
     }
   };
+  
+  const simulateAITournament = (tournament) => {
+    const playersDb = {
+      'Real Madrid': ['Vinicius Jr', 'Bellingham', 'Rodrygo', 'Valverde', 'Modric'],
+      'Man City': ['Haaland', 'De Bruyne', 'Foden', 'Bernardo Silva', 'Rodri'],
+      'Bayern Munich': ['Kane', 'Musiala', 'Sane', 'Muller', 'Gnabry'],
+      'Arsenal': ['Saka', 'Odegaard', 'Martinelli', 'Rice', 'Havertz'],
+      'Barcelona': ['Lewandowski', 'Yamal', 'Pedri', 'Raphinha', 'De Jong'],
+      'PSG': ['Mbappe', 'Dembele', 'Asensio', 'Hakimi', 'Ruiz'],
+      'Inter Milan': ['Martinez', 'Thuram', 'Barella', 'Calhanoglu', 'Dimarco'],
+      'Juventus': ['Vlahovic', 'Chiesa', 'Rabiot', 'Locatelli', 'Bremer'],
+      'Liverpool': ['Salah', 'Nunez', 'Diaz', 'Jota', 'Szoboszlai'],
+      'Atletico Madrid': ['Griezmann', 'Morata', 'Depay', 'Koke', 'Llorente'],
+      'Bayer Leverkusen': ['Boniface', 'Wirtz', 'Frimpong', 'Grimaldo', 'Schick'],
+      'Borussia Dortmund': ['Fullkrug', 'Brandt', 'Sancho', 'Reus', 'Malen'],
+      'AC Milan': ['Leao', 'Giroud', 'Pulisic', 'Hernandez', 'Loftus-Cheek'],
+      'Napoli': ['Osimhen', 'Kvaratskhelia', 'Politano', 'Zielinski', 'Anguissa'],
+      'Sporting CP': ['Gyokeres', 'Goncalves', 'Trincao', 'Edwards', 'Paulinho'],
+      'PSV Eindhoven': ['De Jong', 'Bakayoko', 'Tillman', 'Lozano', 'Pepi'],
+      'Argentina': ['Messi', 'Alvarez', 'Di Maria', 'Mac Allister', 'Fernandez'],
+      'France': ['Mbappe', 'Griezmann', 'Giroud', 'Dembele', 'Tchouameni'],
+      'Brazil': ['Vinicius Jr', 'Rodrygo', 'Raphinha', 'Richarlison', 'Paqueta'],
+      'England': ['Kane', 'Bellingham', 'Saka', 'Foden', 'Rashford'],
+      'Spain': ['Morata', 'Yamal', 'Williams', 'Pedri', 'Rodri'],
+      'Portugal': ['Ronaldo', 'Silva', 'Fernandes', 'Leao', 'Felix'],
+      'Germany': ['Havertz', 'Musiala', 'Wirtz', 'Fullkrug', 'Sane'],
+      'Netherlands': ['Gakpo', 'Simons', 'Depay', 'Malen', 'Weghorst'],
+      'Italy': ['Chiesa', 'Scamacca', 'Barella', 'Frattesi', 'Pellegrini'],
+      'Croatia': ['Kramaric', 'Modric', 'Kovacic', 'Brozovic', 'Perisic'],
+      'Uruguay': ['Nunez', 'Valverde', 'De Arrascaeta', 'Pellistri', 'Araujo'],
+      'Colombia': ['Diaz', 'Rodriguez', 'Borre', 'Arias', 'Sinisterra'],
+      'Belgium': ['Lukaku', 'De Bruyne', 'Doku', 'Trossard', 'Tielemans'],
+      'Morocco': ['En-Nesyri', 'Ziyech', 'Hakimi', 'Amrabat', 'Boufal'],
+      'Japan': ['Mitoma', 'Kubo', 'Doan', 'Minamino', 'Endo'],
+      'USA': ['Pulisic', 'Weah', 'Balogun', 'McKennie', 'Reyna'],
+      'Chelsea': ['Jackson', 'Palmer', 'Sterling', 'Mudryk', 'Fernandez'],
+      'Tottenham': ['Son', 'Richarlison', 'Maddison', 'Kulusevski', 'Johnson'],
+      'Man United': ['Rashford', 'Hojlund', 'Garnacho', 'Fernandes', 'Mount'],
+      'Newcastle': ['Isak', 'Gordon', 'Almiron', 'Guimaraes', 'Barnes'],
+      'Aston Villa': ['Watkins', 'Bailey', 'Diaby', 'McGinn', 'Luiz']
+    };
+
+    const getRandomPlayer = (team) => {
+      const roster = playersDb[team] || ['Player 1', 'Player 2', 'Player 3'];
+      return roster[Math.floor(Math.random() * roster.length)];
+    };
+
+    let simMatches = JSON.parse(JSON.stringify(tournament.matches));
+    
+    // Helper to simulate a match
+    const simMatch = (m) => {
+      if (m.teamA === 'TBD' || m.teamB === 'TBD' || m.teamB === 'BYE') return m;
+      
+      const sA = Math.floor(Math.random() * 4);
+      const sB = Math.floor(Math.random() * 4);
+      m.scoreA = sA.toString();
+      m.scoreB = sB.toString();
+      m.isPlayed = true;
+      m.goalsA = [];
+      m.goalsB = [];
+      
+      for(let i=0; i<sA; i++) {
+        m.goalsA.push({ id: Math.random(), name: getRandomPlayer(m.teamA), time: Math.floor(Math.random()*90)+1, assist: Math.random() > 0.4 ? getRandomPlayer(m.teamA) : '' });
+      }
+      for(let i=0; i<sB; i++) {
+        m.goalsB.push({ id: Math.random(), name: getRandomPlayer(m.teamB), time: Math.floor(Math.random()*90)+1, assist: Math.random() > 0.4 ? getRandomPlayer(m.teamB) : '' });
+      }
+      return m;
+    };
+
+    if (tournament.type === 'liga') {
+      simMatches = simMatches.map(simMatch);
+    } else {
+      // Knockout simulation per round
+      const maxRound = Math.max(...simMatches.map(m => m.roundIndex || 0));
+      for (let r = 0; r <= maxRound; r++) {
+        // Find matches in this round
+        let leg1s = simMatches.filter(m => m.roundIndex === r && m.legInfo === 'Leg 1');
+        let leg2s = simMatches.filter(m => m.roundIndex === r && m.legInfo === 'Leg 2');
+        
+        leg1s.forEach(l1 => {
+          const l2 = leg2s.find(m => m.matchIndex === l1.matchIndex);
+          if (l1.teamA === 'TBD' || l1.teamB === 'TBD' || l1.teamB === 'BYE') return;
+          
+          simMatch(l1);
+          simMatch(l2);
+          
+          // Advance winner
+          const aggA = parseInt(l1.scoreA) + parseInt(l2.scoreB);
+          const aggB = parseInt(l1.scoreB) + parseInt(l2.scoreA);
+          
+          let winner = 'TBD';
+          if (aggA > aggB) winner = l1.teamA;
+          else if (aggB > aggA) winner = l1.teamB;
+          else {
+            l2.penA = Math.floor(Math.random()*2) + 4;
+            l2.penB = l2.penA - 1 - Math.floor(Math.random()*2);
+            winner = l1.teamA; // Simplified
+            if (Math.random() > 0.5) {
+              const temp = l2.penA; l2.penA = l2.penB; l2.penB = temp;
+              winner = l1.teamB;
+            }
+          }
+          
+          const nextR = r + 1;
+          const nextM = Math.floor(l1.matchIndex / 2);
+          const nextMatch1 = simMatches.find(m => m.roundIndex === nextR && m.matchIndex === nextM && m.legInfo === 'Leg 1');
+          const nextMatch2 = simMatches.find(m => m.roundIndex === nextR && m.matchIndex === nextM && m.legInfo === 'Leg 2');
+          
+          if (nextMatch1 && nextMatch2) {
+            if (l1.matchIndex % 2 === 0) {
+              nextMatch1.teamA = winner;
+              nextMatch2.teamB = winner;
+            } else {
+              nextMatch1.teamB = winner;
+              nextMatch2.teamA = winner;
+            }
+          }
+        });
+      }
+    }
+    
+    return { ...tournament, matches: simMatches };
+  };
+
   const createTemplateTournament = (template) => {
     let name = '';
     let type = '';
@@ -341,7 +466,7 @@ function App() {
     }
 
     const matches = generateMatches(teams, type);
-    const newTournament = {
+    let newTournament = {
       id: Date.now().toString(),
       name,
       type,
@@ -349,7 +474,7 @@ function App() {
       teams,
       matches
     };
-    
+    newTournament = simulateAITournament(newTournament);
     setCustomTournaments(prev => [...prev, newTournament]);
     setActiveTournament(newTournament);
     window.scrollTo(0, 0);
@@ -744,6 +869,7 @@ function App() {
                                 type="number" placeholder="Menit" value={g.time} onChange={(e) => updateGoal(match.id, 'goalsA', g.id, 'time', e.target.value)}
                                 style={{ flex: 1, padding: '0.4rem', fontSize: '0.85rem', background: 'rgba(0,0,0,0.3)', color: 'white', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px', outline: 'none' }}
                               />
+<input type="text" placeholder="Assist" value={g.assist || ''} onChange={(e) => updateGoal(match.id, 'goalsA', g.id, 'assist', e.target.value)} style={{ flex: 1.5, padding: '0.4rem', fontSize: '0.85rem', background: 'rgba(0,0,0,0.3)', color: 'white', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px', outline: 'none' }} />
                               <button onClick={() => removeGoal(match.id, 'goalsA', g.id)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '0 4px' }}>
                                 <Trash2 size={16} />
                               </button>
@@ -769,6 +895,7 @@ function App() {
                                 type="number" placeholder="Menit" value={g.time} onChange={(e) => updateGoal(match.id, 'goalsB', g.id, 'time', e.target.value)}
                                 style={{ flex: 1, padding: '0.4rem', fontSize: '0.85rem', background: 'rgba(0,0,0,0.3)', color: 'white', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px', outline: 'none' }}
                               />
+<input type="text" placeholder="Assist" value={g.assist || ''} onChange={(e) => updateGoal(match.id, 'goalsB', g.id, 'assist', e.target.value)} style={{ flex: 1.5, padding: '0.4rem', fontSize: '0.85rem', background: 'rgba(0,0,0,0.3)', color: 'white', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px', outline: 'none' }} />
                               <button onClick={() => removeGoal(match.id, 'goalsB', g.id)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '0 4px' }}>
                                 <Trash2 size={16} />
                               </button>
