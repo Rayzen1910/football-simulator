@@ -304,6 +304,16 @@ function App() {
     setCustomTournaments(updatedTournaments);
     setActiveTournament(updatedTournaments.find(t => t.id === activeTournament.id));
   };
+  const deleteTournament = (id) => {
+    if (window.confirm('Apakah Anda yakin ingin menghapus turnamen ini?')) {
+      const updated = customTournaments.filter(t => t.id !== id);
+      setCustomTournaments(updated);
+      if (activeTournament && activeTournament.id === id) {
+        setActiveTournament(null);
+      }
+      showToast('Turnamen berhasil dihapus');
+    }
+  };
 
   const calculateStandings = (teams, matches) => {
     const standings = teams.map(team => ({ name: team, P: 0, W: 0, D: 0, L: 0, GF: 0, GA: 0, GD: 0, Pts: 0 }));
